@@ -24,7 +24,7 @@ Provide the 10x HDF5 file:
 ```bash
 nextflow run main.nf \
   --input_type hdf5 \
-  --hdf5_file data/filtered_feature_bc_matrix.h5 \
+  --hdf5_file data/sce.h5 \
   --sample_name my_sample
 ```
 
