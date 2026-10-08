@@ -6,10 +6,10 @@ include { READ_10X_COUNTS } from './modules/read-10x-counts.nf'
 */
 params {
     input_type: String = 'mtx'
-    mtx_file: Path = 'data/matrix.mtx.gz'
-    barcodes_file: Path = 'data/barcodes.tsv.gz'
-    features_file: Path = 'data/features.tsv.gz'
-    hdf5_file: Path = 'data/sce.h5'
+    mtx_file: String? = null
+    barcodes_file: String? = null
+    features_file: String? = null
+    hdf5_file: String? = null
     sample_name: String = 'my_sample'
 }
 
@@ -20,15 +20,22 @@ workflow {
     def inputFiles
 
     if( params.input_type == 'mtx' ) {
+        if( !params.mtx_file || !params.barcodes_file || !params.features_file ) {
+            error "For input_type 'mtx', provide --mtx_file, --barcodes_file, and --features_file."
+        }
+        def matrix = file(params.mtx_file)
         inputFiles = tuple(
             meta,
-            file(params.mtx_file),
+            matrix,
             file(params.barcodes_file),
             file(params.features_file),
-            file(params.hdf5_file)
+            matrix
         )
     }
     else if( params.input_type == 'hdf5' ) {
+        if( !params.hdf5_file ) {
+            error "For input_type 'hdf5', provide --hdf5_file."
+        }
         def hdf5 = file(params.hdf5_file)
         // The generated module declares all four source files as required paths.
         // The HDF5 reader uses hdf5_file; repeat that file in the unused slots

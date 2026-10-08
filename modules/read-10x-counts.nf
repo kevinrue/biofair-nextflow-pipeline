@@ -15,7 +15,7 @@ process READ_10X_COUNTS {
     // barcodes_file: Cell barcodes (tsv)
     // features_file: Feature annotations (tsv)
     // hdf5_file: HDF5 file (h5)
-    tuple val(meta), path(mtx_file), path(barcodes_file), path(features_file), path(hdf5_file)
+    tuple val(meta), path(mtx_file, name: 'mtx/*'), path(barcodes_file, name: 'barcodes/*'), path(features_file, name: 'features/*'), path(hdf5_file, name: 'hdf5/*')
     // Input type (string; default in spec: mtx; required)
     val type
     // Sample name (string; required)
