@@ -11,7 +11,7 @@ process RNA_QC {
 
     input:
     // meta: map identifying the unit of work; meta.id names the tag
-    // infile: SingleCellExperiment (h5)
+    // infile: SingleCellExperiment (h5ad)
     tuple val(meta), path(infile)
     // Mitochondrial gene prefix (string; default in spec: MT-)
     val mitochondrial_prefix
@@ -19,7 +19,7 @@ process RNA_QC {
     val num_mads
 
     output:
-    tuple val(meta), path('outfile.h5'), emit: outfile
+    tuple val(meta), path('sce_rnaqc.h5ad'), emit: sce_rnaqc
     tuple val(meta), path('qc_table.tsv'), emit: qc_table
 
     script:
@@ -28,13 +28,13 @@ process RNA_QC {
         --infile '${(infile as String).replace("'", "'\\''")}' \\
         --mitochondrial_prefix '${(mitochondrial_prefix as String).replace("'", "'\\''")}' \\
         --num_mads '${(num_mads as String).replace("'", "'\\''")}' \\
-        --outfile 'outfile.h5' \\
+        --sce_rnaqc 'sce_rnaqc.h5ad' \\
         --qc_table 'qc_table.tsv'
     """
 
     stub:
     """
-    touch 'outfile.h5'
+    touch 'sce_rnaqc.h5ad'
     touch 'qc_table.tsv'
     """
 }
