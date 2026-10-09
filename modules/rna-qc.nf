@@ -4,7 +4,7 @@
 
 process RNA_QC {
     tag "${meta.id}"
-    container 'ghcr.io/kevinrue/scrapper@sha256:d022202da1f7a5daa034e47804519d50d915313c303380eb0228881b5fcb7a85'
+    container 'ghcr.io/kevinrue/scrapper:devel'
     cpus 1
     memory '4 GB'
     disk '10 GB'
