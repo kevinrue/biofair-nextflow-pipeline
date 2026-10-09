@@ -1,0 +1,48 @@
+name: Test pipeline
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test ${{ matrix.mode }} input
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [mtx, hdf5]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Nextflow
+        uses: nf-core/setup-nextflow@v2
+        with:
+          version: 26.04.6
+
+      - name: Run Matrix Market input
+        if: matrix.mode == 'mtx'
+        run: |
+          nextflow run main.nf -with-docker \
+            --input_type mtx \
+            --mtx_file data/matrix.mtx.gz \
+            --barcodes_file data/barcodes.tsv.gz \
+            --features_file data/features.tsv.gz \
+            --sample_name ci_mtx
+          test -n "$(find work -type f -name outfile.h5 -print -quit)"
+
+      - name: Run HDF5 input
+        if: matrix.mode == 'hdf5'
+        run: |
+          nextflow run main.nf -with-docker \
+            --input_type hdf5 \
+            --hdf5_file data/sce.h5 \
+            --sample_name ci_hdf5
+          test -n "$(find work -type f -name outfile.h5ad -print -quit)"
