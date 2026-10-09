@@ -11,8 +11,8 @@ process READ_10X_COUNTS_H5 {
 
     input:
     // meta: map identifying the unit of work; meta.id names the tag
-    // hdf5_file: HDF5 file (h5)
-    tuple val(meta), path(hdf5_file)
+    // infile: HDF5 file (h5)
+    tuple val(meta), path(infile, name: 'infile.h5')
     // Sample name (string; required)
     val sample_name
 
@@ -22,7 +22,7 @@ process READ_10X_COUNTS_H5 {
     script:
     """
     Rscript -e 'BiocJobs::execJob("DropletUtils", "read-10x-counts-h5")' \\
-        --hdf5_file '${(hdf5_file as String).replace("'", "'\\''")}' \\
+        --infile '${(infile as String).replace("'", "'\\''")}' \\
         --sample_name '${(sample_name as String).replace("'", "'\\''")}' \\
         --outfile 'outfile.h5ad'
     """
