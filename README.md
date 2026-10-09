@@ -9,7 +9,7 @@ Choose one input format for each run. Paths are supplied with `--mtx_file`, `--b
 Provide all three files:
 
 ```bash
-nextflow run main.nf \
+nextflow run main.nf -with-docker \
   --input_type mtx \
   --mtx_file data/matrix.mtx.gz \
   --barcodes_file data/barcodes.tsv.gz \
@@ -22,7 +22,7 @@ nextflow run main.nf \
 Provide the 10x HDF5 file:
 
 ```bash
-nextflow run main.nf \
+nextflow run main.nf -with-docker \
   --input_type hdf5 \
   --hdf5_file data/sce.h5 \
   --sample_name my_sample

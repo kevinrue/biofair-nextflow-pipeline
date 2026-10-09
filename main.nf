@@ -1,5 +1,6 @@
 // Include modules
-include { READ_10X_COUNTS_MTX; READ_10X_COUNTS_HDF5 } from './modules/read-10x-counts.nf'
+include { READ_10X_COUNTS_MTX } from './modules/read-10x-counts-mtx.nf'
+include { READ_10X_COUNTS_H5 } from './modules/read-10x-counts-h5.nf'
 
 /*
 * Pipeline parameters
@@ -35,7 +36,7 @@ workflow {
         if( !params.hdf5_file ) {
             error "For input_type 'hdf5', provide --hdf5_file."
         }
-        READ_10X_COUNTS_HDF5(
+        READ_10X_COUNTS_H5(
             Channel.of(tuple(meta, file(params.hdf5_file))),
             params.sample_name
         )
