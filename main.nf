@@ -1,6 +1,7 @@
 // Include modules
 include { READ_10X_COUNTS_MTX } from './modules/read-10x-counts-mtx.nf'
 include { READ_10X_COUNTS_H5 } from './modules/read-10x-counts-h5.nf'
+include { RNA_QC } from './modules/rna-qc.nf'
 
 /*
 * Pipeline parameters
@@ -22,7 +23,7 @@ workflow {
         if( !params.mtx_file || !params.barcodes_file || !params.features_file ) {
             error "For input_type 'mtx', provide --mtx_file, --barcodes_file, and --features_file."
         }
-        READ_10X_COUNTS_MTX(
+        def counts = READ_10X_COUNTS_MTX(
             Channel.of(tuple(
                 meta,
                 file(params.mtx_file),
@@ -31,15 +32,17 @@ workflow {
             )),
             params.sample_name
         )
+        RNA_QC(counts.outfile, 'MT-', 3.0)
     }
     else if( params.input_type == 'hdf5' ) {
         if( !params.hdf5_file ) {
             error "For input_type 'hdf5', provide --hdf5_file."
         }
-        READ_10X_COUNTS_H5(
+        def counts = READ_10X_COUNTS_H5(
             Channel.of(tuple(meta, file(params.hdf5_file))),
             params.sample_name
         )
+        RNA_QC(counts.outfile, 'MT-', 3.0)
     }
     else {
         error "Unsupported input_type '${params.input_type}'. Choose 'mtx' or 'hdf5'."
