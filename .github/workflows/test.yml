@@ -32,7 +32,7 @@ jobs:
         run: |
           nextflow run main.nf -with-docker \
             --input_type mtx \
-            --mtx_file data/matrix.mtx.gz \
+            --matrix_file data/matrix.mtx.gz \
             --barcodes_file data/barcodes.tsv.gz \
             --features_file data/features.tsv.gz \
             --sample_name ci_mtx
