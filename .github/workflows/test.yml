@@ -43,7 +43,7 @@ jobs:
         run: |
           nextflow run main.nf -with-docker \
             --input_type hdf5 \
-            --hdf5_file data/sce.h5 \
+            --hdf5_file 'https://zenodo.org/records/23285638/files/pbmc3k.h5' \
             --sample_name ci_hdf5
           test -n "$(find work -type f -name outfile.h5ad -print -quit)"
 
