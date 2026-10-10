@@ -4,6 +4,10 @@ This pipeline reads 10x Genomics count data with `DropletUtils::read10xCounts` a
 
 Choose one input format for each run. Paths are supplied with `--mtx_file`, `--barcodes_file`, and `--features_file` for Matrix Market input, or with `--hdf5_file` for HDF5 input. Unspecified file parameters default to `null`; only the parameters required by the selected input type need to be provided.
 
+## Development container
+
+The development container uses Docker-in-Docker so Nextflow task containers can bind-mount the pipeline work directory. Rebuild the development container after pulling this configuration before running the pipeline. Docker images and containers created from the development container are isolated from the host Docker daemon.
+
 ## Matrix Market input
 
 Provide all three files:
@@ -14,7 +18,7 @@ nextflow run main.nf -with-docker \
   --matrix_file data/matrix.mtx.gz \
   --barcodes_file data/barcodes.tsv.gz \
   --features_file data/features.tsv.gz \
-  --sample_name my_sample
+  --sample_name test_sample
 ```
 
 ## HDF5 input
@@ -25,7 +29,7 @@ Provide the 10x HDF5 file:
 nextflow run main.nf -with-docker \
   --input_type hdf5 \
   --hdf5_file data/sce.h5 \
-  --sample_name my_sample
+  --sample_name test_sample
 ```
 
 The pipeline defaults `input_type` to `mtx`; specify `--input_type hdf5` when using the HDF5 input. The selected input file or files must exist and be readable by Nextflow.
