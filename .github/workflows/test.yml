@@ -46,3 +46,10 @@ jobs:
             --hdf5_file data/sce.h5 \
             --sample_name ci_hdf5
           test -n "$(find work -type f -name outfile.h5ad -print -quit)"
+
+      - name: Upload results archive
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-results-${{ matrix.mode }}
+          path: results/
