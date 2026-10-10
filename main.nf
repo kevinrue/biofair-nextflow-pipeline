@@ -2,7 +2,8 @@
 include { READ_10X_COUNTS_MTX } from './modules/read-10x-counts-mtx.nf'
 include { READ_10X_COUNTS_H5 } from './modules/read-10x-counts-h5.nf'
 include { RNA_QC } from './modules/rna-qc.nf'
-include { PLOT_COLDATA } from './modules/plot-coldata.nf'
+include { PLOT_COLDATA as PLOT_COLDATA_SUM } from './modules/plot-coldata.nf'
+include { PLOT_COLDATA as PLOT_COLDATA_DETECTED } from './modules/plot-coldata.nf'
 
 /*
 * Pipeline parameters
@@ -50,12 +51,14 @@ workflow {
     }
 
     def qc = RNA_QC(counts.outfile, 'MT-', 3.0)
-    def plot = PLOT_COLDATA(qc.outfile, 'sum', 3.0, 5.0)
+    def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', 3.0, 5.0)
+    def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', 3.0, 5.0)
 
     publish:
     qc_h5ad = qc.outfile
     qc_table = qc.qc_table
-    sum_plot = plot.outfile
+    sum_plot = sumPlot.outfile
+    detected_plot = detectedPlot.outfile
 }
 
 output {
@@ -68,7 +71,11 @@ output {
         mode 'copy'
     }
     sum_plot {
-        path 'qc/plots'
+        path 'qc/plot_sum'
+        mode 'copy'
+    }
+    detected_plot {
+        path 'qc/plot_detected'
         mode 'copy'
     }
 }
