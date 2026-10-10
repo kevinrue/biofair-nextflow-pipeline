@@ -4,7 +4,7 @@
 
 process PLOT_COLDATA {
     tag "${meta.id}"
-    container 'bioconductor/bioconductor_docker:RELEASE_3_23'
+    container 'ghcr.io/kevinrue/scater:devel'
     cpus 1
     memory '4 GB'
     disk '10 GB'
@@ -13,8 +13,8 @@ process PLOT_COLDATA {
     // meta: map identifying the unit of work; meta.id names the tag
     // infile: Short UI label (h5ad)
     tuple val(meta), path(infile, name: 'infile.h5ad')
-    // Name of metadata to plot on the Y-axis (string; required)
-    val y
+    // Name of metadata column to plot on the Y-axis (string; required)
+    val y_column
     // Plot width (inches) (float; default in spec: 3)
     val width
     // Plot height (inches) (float; default in spec: 5)
@@ -27,7 +27,7 @@ process PLOT_COLDATA {
     """
     Rscript -e 'BiocJobs::execJob("scater", "plot-coldata")' \\
         --infile '${(infile as String).replace("'", "'\\''")}' \\
-        --y '${(y as String).replace("'", "'\\''")}' \\
+        --y_column '${(y_column as String).replace("'", "'\\''")}' \\
         --width '${(width as String).replace("'", "'\\''")}' \\
         --height '${(height as String).replace("'", "'\\''")}' \\
         --outfile 'outfile.pdf'
