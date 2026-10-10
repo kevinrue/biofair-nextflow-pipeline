@@ -1,0 +1,26 @@
+{
+  "name": "biofair-nextflow-pipeline",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "NXF_HOME": "/home/vscode/.nextflow"
+  },
+  "postCreateCommand": "nextflow -version && docker version --format '{{.Server.Version}}'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "nextflow.nextflow",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
