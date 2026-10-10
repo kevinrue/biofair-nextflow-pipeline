@@ -65,7 +65,7 @@ Provide the 10x HDF5 file:
 ```bash
 nextflow run main.nf -with-docker \
   --input_type hdf5 \
-  --hdf5_file data/sce.h5 \
+  --hdf5_file 'https://zenodo.org/records/23285638/files/pbmc3k.h5' \
   --sample_name test_sample
 ```
 
