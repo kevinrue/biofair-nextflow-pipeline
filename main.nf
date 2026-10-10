@@ -9,7 +9,7 @@ include { RNA_QC } from './modules/rna-qc.nf'
 */
 params {
     input_type: String = 'mtx'
-    mtx_file: String? = null
+    matrix_file: String? = null
     barcodes_file: String? = null
     features_file: String? = null
     hdf5_file: String? = null
@@ -23,13 +23,13 @@ workflow {
     def counts
 
     if( params.input_type == 'mtx' ) {
-        if( !params.mtx_file || !params.barcodes_file || !params.features_file ) {
-            error "For input_type 'mtx', provide --mtx_file, --barcodes_file, and --features_file."
+        if( !params.matrix_file || !params.barcodes_file || !params.features_file ) {
+            error "For input_type 'mtx', provide --matrix_file, --barcodes_file, and --features_file."
         }
         counts = READ_10X_COUNTS_MTX(
             Channel.of(tuple(
                 meta,
-                file(params.mtx_file),
+                file(params.matrix_file),
                 file(params.barcodes_file),
                 file(params.features_file)
             )),
