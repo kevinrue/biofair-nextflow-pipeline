@@ -52,9 +52,9 @@ Provide all three files:
 ```bash
 nextflow run main.nf -with-docker \
   --input_type mtx \
-  --matrix_file data/matrix.mtx.gz \
-  --barcodes_file data/barcodes.tsv.gz \
-  --features_file data/features.tsv.gz \
+  --matrix_file 'https://zenodo.org/record/3581213/files/matrix.mtx' \
+  --barcodes_file 'https://zenodo.org/record/3581213/files/barcodes.tsv' \
+  --features_file 'https://zenodo.org/record/3581213/files/genes.tsv' \
   --sample_name test_sample
 ```
 
