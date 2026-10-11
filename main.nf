@@ -52,7 +52,7 @@ workflow {
     }
 
     def qc = RNA_QC(counts.outfile, 'MT-', 3.0)
-    def filtered = SCE_FILTER(qc.outfile, ' ', 'detected > 200 & detected < 2500')
+    def filtered = SCE_FILTER(qc.outfile, ' ', 'detected > 200 & detected < 2500 & subset.proportion.MT < 0.05')
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', 3.0, 5.0)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', 3.0, 5.0)
 
