@@ -14,11 +14,11 @@ The import, QC, and plotting tasks run in their respective DropletUtils, scrappe
 
 ## Inputs and parameters
 
-Choose one input format for each run. `input_type` defaults to `mtx`.
+Choose one input format for each run and explicitly set `input_type` to `mtx` or `hdf5`.
 
 | Parameter | Required for | Description |
 | --- | --- | --- |
-| `--input_type` | Optional | Input format: `mtx` (default) or `hdf5`. |
+| `--input_type` | Required | Input format: `mtx` or `hdf5`. |
 | `--matrix_file` | `mtx` | Matrix Market count matrix. |
 | `--barcodes_file` | `mtx` | Cell barcodes TSV file. |
 | `--features_file` | `mtx` | Feature annotations TSV file. |
@@ -69,4 +69,4 @@ Provide the 10x HDF5 file in `params/hdf5.yml`, then run:
 nextflow run main.nf -with-docker -params-file params/hdf5.yml
 ```
 
-The parameter files include the input type, file locations, sample name, and filter settings. Copy and edit the appropriate file to configure a run.
+The parameter files include the required input type, file locations, sample name, and filter settings. Copy and edit the appropriate file to configure a run.

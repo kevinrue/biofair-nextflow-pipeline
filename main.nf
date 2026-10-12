@@ -10,7 +10,7 @@ include { PLOT_COLDATA as PLOT_COLDATA_DETECTED } from './modules/plot-coldata.n
 * Pipeline parameters
 */
 params {
-    input_type: String = 'mtx'
+    input_type: String? = null
     matrix_file: String? = null
     barcodes_file: String? = null
     features_file: String? = null
@@ -31,7 +31,10 @@ workflow {
     def meta = [id: params.sample_name]
     def counts
 
-    if( params.input_type == 'mtx' ) {
+    if( !params.input_type ) {
+        error "Specify --input_type as 'mtx' or 'hdf5'."
+    }
+    else if( params.input_type == 'mtx' ) {
         if( !params.matrix_file || !params.barcodes_file || !params.features_file ) {
             error "For input_type 'mtx', provide --matrix_file, --barcodes_file, and --features_file."
         }
