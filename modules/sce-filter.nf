@@ -12,11 +12,8 @@ process SCE_FILTER {
     input:
     // meta: map identifying the unit of work; meta.id names the tag
     // infile: Input H5AD file (h5ad)
-    tuple val(meta), path(infile, name: 'infile.h5ad')
-    // Expression applied to filter by row metadata. (string; default in spec:  )
-    val rowdata
-    // Expression applied to filter by column metadata. (string; default in spec:  )
-    val coldata
+    // metadata_filters: Metadata predicates (json)
+    tuple val(meta), path(infile, name: 'infile.h5ad'), path(metadata_filters, name: 'metadata_filters.json')
 
     output:
     tuple val(meta), path('outfile.h5ad'), emit: outfile
@@ -25,8 +22,7 @@ process SCE_FILTER {
     """
     Rscript -e 'BiocJobs::execJob("SingleCellExperiment", "sce-filter")' \\
         --infile '${(infile as String).replace("'", "'\\''")}' \\
-        --rowdata '${(rowdata as String).replace("'", "'\\''")}' \\
-        --coldata '${(coldata as String).replace("'", "'\\''")}' \\
+        --metadata_filters '${(metadata_filters as String).replace("'", "'\\''")}' \\
         --outfile 'outfile.h5ad'
     """
 

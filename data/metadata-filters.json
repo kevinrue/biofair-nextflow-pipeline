@@ -1,0 +1,10 @@
+{
+  "rowdata": {},
+  "coldata": {
+    "all": [
+      {"field": "detected", "op": "gt", "value": 200},
+      {"field": "detected", "op": "lt", "value": 2500},
+      {"field": "subset.proportion.MT", "op": "lt", "value": 0.05}
+    ]
+  }
+}

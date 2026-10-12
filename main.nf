@@ -22,7 +22,7 @@ params {
     plot_qc_sum_height: Float = 5.0
     plot_qc_detected_width: Float = 3.0
     plot_qc_detected_height: Float = 5.0
-    coldata_filter: String = ' '
+    metadata_filters: String? = null
 }
 
 workflow {
@@ -61,8 +61,14 @@ workflow {
         error "Unsupported input_type '${params.input_type}'. Choose 'mtx' or 'hdf5'."
     }
 
+    if( !params.metadata_filters ) {
+        error "Specify --metadata_filters with a JSON file containing rowdata and coldata filters."
+    }
+
     def qc = RNA_QC(counts.outfile, params.mitochondrial_prefix, params.mitochondrial_threshold)
-    def filtered = SCE_FILTER(qc.outfile, ' ', params.coldata_filter)
+    def metadataFilterFile = file(params.metadata_filters)
+    def filterInput = qc.outfile.map { filterMeta, infile -> tuple(filterMeta, infile, metadataFilterFile) }
+    def filtered = SCE_FILTER(filterInput)
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 

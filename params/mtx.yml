@@ -9,4 +9,4 @@ plot_qc_sum_width: 3.0
 plot_qc_sum_height: 5.0
 plot_qc_detected_width: 3.0
 plot_qc_detected_height: 5.0
-coldata_filter: 'detected > 200 & detected < 2500 & subset.proportion.MT < 0.05'
+metadata_filters: 'data/metadata-filters.json'

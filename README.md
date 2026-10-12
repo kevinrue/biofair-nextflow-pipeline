@@ -30,9 +30,9 @@ Choose one input format for each run and explicitly set `input_type` to `mtx` or
 | `--plot_qc_sum_height` | Optional | Height in inches of the QC sum plot PDF; defaults to `5.0`. |
 | `--plot_qc_detected_width` | Optional | Width in inches of the QC detected plot PDF; defaults to `3.0`. |
 | `--plot_qc_detected_height` | Optional | Height in inches of the QC detected plot PDF; defaults to `5.0`. |
-| `--coldata_filter` | Optional | Expression used to filter cells by column metadata; defaults to `detected > 200 & detected < 2500 & subset.proportion.MT < 0.05`. |
+| `--metadata_filters` | Required | JSON file containing `rowdata` and `coldata` filter trees. Either section can be empty to skip filtering that dimension. The examples use `data/metadata-filters.json`. |
 
-Only provide the input file parameters for the selected format. All selected files must exist and be readable by Nextflow.
+Only provide the input file parameters for the selected format. All selected files, including the metadata filter JSON, must exist and be readable by Nextflow. The JSON filter format uses explicit predicate objects; see `data/metadata-filters.json` for the example column filter and an empty row filter.
 
 ## Outputs
 
@@ -69,4 +69,4 @@ Provide the 10x HDF5 file in `params/hdf5.yml`, then run:
 nextflow run main.nf -with-docker -params-file params/hdf5.yml
 ```
 
-The parameter files include the required input type, file locations, sample name, and filter settings. Copy and edit the appropriate file to configure a run.
+The parameter files include the required input type, file locations, sample name, and metadata filter file path. Copy and edit the appropriate file to configure a run. Edit `data/metadata-filters.json` to change row or column filtering.
