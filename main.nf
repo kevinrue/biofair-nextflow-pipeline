@@ -17,6 +17,11 @@ params {
     hdf5_file: String? = null
     sample_name: String = 'my_sample'
     mitochondrial_prefix: String = 'MT-'
+    mitochondrial_threshold: Float = 3.0
+    plot_qc_sum_width: Float = 3.0
+    plot_qc_sum_height: Float = 5.0
+    plot_qc_detected_width: Float = 3.0
+    plot_qc_detected_height: Float = 5.0
     coldata_filter: String = ' '
 }
 
@@ -53,10 +58,10 @@ workflow {
         error "Unsupported input_type '${params.input_type}'. Choose 'mtx' or 'hdf5'."
     }
 
-    def qc = RNA_QC(counts.outfile, params.mitochondrial_prefix, 3.0)
+    def qc = RNA_QC(counts.outfile, params.mitochondrial_prefix, params.mitochondrial_threshold)
     def filtered = SCE_FILTER(qc.outfile, ' ', params.coldata_filter)
-    def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', 3.0, 5.0)
-    def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', 3.0, 5.0)
+    def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
+    def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 
     publish:
     filtered_h5ad = filtered.outfile

@@ -25,6 +25,11 @@ Choose one input format for each run. `input_type` defaults to `mtx`.
 | `--hdf5_file` | `hdf5` | 10x HDF5 count file. |
 | `--sample_name` | Optional | Sample identifier used for task labels; defaults to `my_sample`. |
 | `--mitochondrial_prefix` | Optional | Prefix used to identify mitochondrial genes during RNA QC; defaults to `MT-`. |
+| `--mitochondrial_threshold` | Optional | Mitochondrial threshold passed to RNA QC; defaults to `3.0`. |
+| `--plot_qc_sum_width` | Optional | Width in inches of the QC sum plot PDF; defaults to `3.0`. |
+| `--plot_qc_sum_height` | Optional | Height in inches of the QC sum plot PDF; defaults to `5.0`. |
+| `--plot_qc_detected_width` | Optional | Width in inches of the QC detected plot PDF; defaults to `3.0`. |
+| `--plot_qc_detected_height` | Optional | Height in inches of the QC detected plot PDF; defaults to `5.0`. |
 | `--coldata_filter` | Optional | Expression used to filter cells by column metadata; defaults to `detected > 200 & detected < 2500 & subset.proportion.MT < 0.05`. |
 
 Only provide the input file parameters for the selected format. All selected files must exist and be readable by Nextflow.
