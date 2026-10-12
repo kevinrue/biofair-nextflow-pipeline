@@ -1,0 +1,5 @@
+input_type: hdf5
+hdf5_file: 'https://zenodo.org/records/23305303/files/pbmc3k.h5'
+sample_name: test_sample
+mitochondrial_prefix: 'MT-'
+coldata_filter: 'detected > 200 & detected < 2500 & subset.proportion.MT < 0.05'

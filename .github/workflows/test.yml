@@ -30,21 +30,13 @@ jobs:
       - name: Run Matrix Market input
         if: matrix.mode == 'mtx'
         run: |
-          nextflow run main.nf -with-docker \
-            --input_type mtx \
-            --matrix_file 'https://zenodo.org/record/3581213/files/matrix.mtx' \
-            --barcodes_file 'https://zenodo.org/record/3581213/files/barcodes.tsv' \
-            --features_file 'https://zenodo.org/record/3581213/files/genes.tsv' \
-            --sample_name ci_mtx
+          nextflow run main.nf -with-docker -params-file params/mtx.yml
           test -n "$(find work -type f -name outfile.h5 -print -quit)"
 
       - name: Run HDF5 input
         if: matrix.mode == 'hdf5'
         run: |
-          nextflow run main.nf -with-docker \
-            --input_type hdf5 \
-            --hdf5_file 'https://zenodo.org/records/23305303/files/pbmc3k.h5' \
-            --sample_name ci_hdf5
+          nextflow run main.nf -with-docker -params-file params/hdf5.yml
           test -n "$(find work -type f -name outfile.h5ad -print -quit)"
 
       - name: Upload results archive

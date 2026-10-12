@@ -1,0 +1,7 @@
+input_type: mtx
+matrix_file: 'https://zenodo.org/record/3581213/files/matrix.mtx'
+barcodes_file: 'https://zenodo.org/record/3581213/files/barcodes.tsv'
+features_file: 'https://zenodo.org/record/3581213/files/genes.tsv'
+sample_name: test_sample
+mitochondrial_prefix: 'MT-'
+coldata_filter: 'detected > 200 & detected < 2500 & subset.proportion.MT < 0.05'

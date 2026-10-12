@@ -24,6 +24,8 @@ Choose one input format for each run. `input_type` defaults to `mtx`.
 | `--features_file` | `mtx` | Feature annotations TSV file. |
 | `--hdf5_file` | `hdf5` | 10x HDF5 count file. |
 | `--sample_name` | Optional | Sample identifier used for task labels; defaults to `my_sample`. |
+| `--mitochondrial_prefix` | Optional | Prefix used to identify mitochondrial genes during RNA QC; defaults to `MT-`. |
+| `--coldata_filter` | Optional | Expression used to filter cells by column metadata; defaults to `detected > 200 & detected < 2500 & subset.proportion.MT < 0.05`. |
 
 Only provide the input file parameters for the selected format. All selected files must exist and be readable by Nextflow.
 
@@ -35,7 +37,8 @@ Nextflow publishes the final results under `results/`:
 | --- | --- |
 | `results/qc/h5ad/` | QC-filtered AnnData (`.h5ad`) file. |
 | `results/qc/tables/` | QC metrics table (`qc_table.tsv`). |
-| `results/qc/plots/` | PDF plot of the `sum` QC column. |
+| `results/qc/plot_sum/` | PDF plot of the `sum` QC column. |
+| `results/qc/plot_detected/` | PDF plot of the `detected` QC column. |
 
 Intermediate imported count files are retained in the Nextflow `work/` directory and are passed directly to the QC stage.
 
@@ -47,26 +50,18 @@ The development container uses Docker-in-Docker so Nextflow task containers can 
 
 ### Matrix Market input
 
-Provide all three files:
+Provide all three files in `params/mtx.yml`, then run:
 
 ```bash
-nextflow run main.nf -with-docker \
-  --input_type mtx \
-  --matrix_file 'https://zenodo.org/record/3581213/files/matrix.mtx' \
-  --barcodes_file 'https://zenodo.org/record/3581213/files/barcodes.tsv' \
-  --features_file 'https://zenodo.org/record/3581213/files/genes.tsv' \
-  --sample_name test_sample
+nextflow run main.nf -with-docker -params-file params/mtx.yml
 ```
 
 ### HDF5 input
 
-Provide the 10x HDF5 file:
+Provide the 10x HDF5 file in `params/hdf5.yml`, then run:
 
 ```bash
-nextflow run main.nf -with-docker \
-  --input_type hdf5 \
-  --hdf5_file 'https://zenodo.org/records/23305303/files/pbmc3k.h5' \
-  --sample_name test_sample
+nextflow run main.nf -with-docker -params-file params/hdf5.yml
 ```
 
-Specify `--input_type hdf5` when using a 10x HDF5 input; otherwise, the Matrix Market input mode is used by default.
+The parameter files include the input type, file locations, sample name, and filter settings. Copy and edit the appropriate file to configure a run.
