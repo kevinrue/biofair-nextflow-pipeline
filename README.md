@@ -1,6 +1,6 @@
 # BioFAIR Nextflow pipeline
 
-This pipeline processes a single 10x Genomics single-cell RNA-seq sample. It imports counts, performs RNA quality control, and produces a QC summary plot.
+This pipeline processes a single 10x Genomics single-cell RNA-seq sample. It imports counts, performs RNA quality control, filters metadata, and normalizes counts.
 
 ## Workflow
 
@@ -8,7 +8,9 @@ For each run, the pipeline:
 
 1. Imports 10x counts with `DropletUtils`, from either Matrix Market files or a 10x HDF5 file.
 2. Runs the `scrapper` RNA QC job using the configured mitochondrial-gene prefix and outlier threshold.
-3. Creates a `scater` PDF plot using the configured QC column and dimensions.
+3. Filters row and column metadata using the configured JSON predicates.
+4. Normalizes RNA counts with `scrapper`.
+5. Creates QC plots for inspection.
 
 The import, QC, and plotting tasks run in their respective DropletUtils, scrapper, and scater containers.
 
@@ -36,16 +38,16 @@ Only provide the input file parameters for the selected format. All selected fil
 
 ## Outputs
 
-Nextflow publishes the final results under `results/`:
+Nextflow publishes the normalized H5AD and QC branch outputs under `results/`:
 
 | Path | Contents |
 | --- | --- |
-| `results/qc/h5ad/` | QC-filtered AnnData (`.h5ad`) file. |
+| `results/normalized/h5ad/` | Metadata-filtered and normalized AnnData (`.h5ad`) file. |
 | `results/qc/tables/` | QC metrics table (`qc_table.tsv`). |
 | `results/qc/plot_sum/` | PDF plot of the `sum` QC column. |
 | `results/qc/plot_detected/` | PDF plot of the `detected` QC column. |
 
-Intermediate imported count files are retained in the Nextflow `work/` directory and are passed directly to the QC stage.
+Intermediate imported counts and the metadata-filtered but unnormalized H5AD remain in the Nextflow `work/` directory. The QC table and plots remain published as branch outputs.
 
 ## Development container
 
