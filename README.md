@@ -12,7 +12,7 @@ For each run, the pipeline:
 4. Filters row and column metadata using the configured JSON predicates.
 5. Normalizes RNA counts with `scrapper`.
 6. Selects highly variable genes from the normalized counts.
-7. Runs PCA on the normalized counts using the selected HVGs as features, retaining 25 principal components.
+7. Runs PCA on the normalized counts using the selected HVGs as features, retaining the number of principal components set by `--n_pcs` (default: 25).
 
 The import, QC, and plotting tasks run in their respective DropletUtils, scrapper, and scater containers.
 
@@ -35,6 +35,7 @@ Choose one input format for each run and explicitly set `input_type` to `mtx` or
 | `--plot_qc_detected_width` | Optional | Width in inches of the QC detected plot PDF; defaults to `3.0`. |
 | `--plot_qc_detected_height` | Optional | Height in inches of the QC detected plot PDF; defaults to `5.0`. |
 | `--metadata_filters` | Required | JSON file containing `rowdata` and `coldata` filter trees. Either section can be empty to skip filtering that dimension. The examples use `data/metadata-filters.json`. |
+| `--n_pcs` | Optional | Number of principal components to retain in PCA; defaults to `25`. |
 
 Only provide the input file parameters for the selected format. All selected files, including the metadata filter JSON, must exist and be readable by Nextflow. The JSON filter format uses explicit predicate objects; see `data/metadata-filters.json` for the example column filter and an empty row filter.
 

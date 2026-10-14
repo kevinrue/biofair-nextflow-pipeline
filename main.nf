@@ -21,6 +21,7 @@ params {
     sample_name: String = 'my_sample'
     mitochondrial_prefix: String = 'MT-'
     mitochondrial_threshold: Float = 3.0
+    n_pcs: Integer = 25
     plot_qc_sum_width: Float = 3.0
     plot_qc_sum_height: Float = 5.0
     plot_qc_detected_width: Float = 3.0
@@ -75,7 +76,7 @@ workflow {
     def normalized = NORMALIZE_RNA_COUNTS_SE(filtered.outfile)
     def hvgs = CHOOSE_RNA_HVGS_SE(normalized.outfile)
     def pcaInput = normalized.outfile.join(hvgs.hvgs)
-    def pca = RUN_PCA_SE(pcaInput, 25)
+    def pca = RUN_PCA_SE(pcaInput, params.n_pcs)
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 
