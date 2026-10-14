@@ -47,8 +47,8 @@ Nextflow publishes the PCA H5AD, PCA variance-explained plot, HVG list, and QC b
 
 | Path | Contents |
 | --- | --- |
-| `results/pca/h5ad/` | Metadata-filtered, normalized AnnData with PCA results (`.h5ad`) file. |
-| `results/pca/variance_explained/` | PDF plot of the variance explained by the PCA components. |
+| `results/pca/outfile.h5ad` | Metadata-filtered, normalized AnnData with PCA results. |
+| `results/pca/plot_var_explained.pdf` | PDF plot of the variance explained by the PCA components. |
 | `results/hvgs/` | Text file (`hvgs.txt`) listing the selected highly variable genes. |
 | `results/qc/tables/` | QC metrics table (`qc_table.tsv`). |
 | `results/qc/plot_sum/` | PDF plot of the `sum` QC column. |

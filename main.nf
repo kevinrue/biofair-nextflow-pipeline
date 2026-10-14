@@ -98,11 +98,11 @@ workflow {
 
 output {
     pca_h5ad {
-        path 'pca/h5ad'
+        path 'pca'
         mode 'copy'
     }
     pca_var_explained_plot {
-        path 'pca/variance_explained'
+        path 'pca'
         mode 'copy'
     }
     hvgs {
