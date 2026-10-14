@@ -13,6 +13,7 @@ For each run, the pipeline:
 5. Normalizes RNA counts with `scrapper`.
 6. Selects highly variable genes from the normalized counts.
 7. Runs PCA on the normalized counts using the selected HVGs as features, retaining the number of principal components set by `--n_pcs` (default: 25).
+8. Runs UMAP using the PCA results and the number of neighbours set by `--neighbours` (default: 15).
 
 The import, QC, and plotting tasks run in their respective DropletUtils, scrapper, and scater containers.
 
@@ -36,6 +37,7 @@ Choose one input format for each run and explicitly set `input_type` to `mtx` or
 | `--plot_qc_detected_height` | Optional | Height in inches of the QC detected plot PDF; defaults to `5.0`. |
 | `--metadata_filters` | Required | JSON file containing `rowdata` and `coldata` filter trees. Either section can be empty to skip filtering that dimension. The examples use `data/metadata-filters.json`. |
 | `--n_pcs` | Optional | Number of principal components to retain in PCA; defaults to `25`. |
+| `--neighbours` | Optional | Number of neighbours used by UMAP; defaults to `15` (the example parameter files use `10`). |
 | `--plot_pca_var_width` | Optional | Width in inches of the PCA variance-explained plot PDF; defaults to `7.0` (the example parameter files use `9.0`). |
 | `--plot_pca_var_height` | Optional | Height in inches of the PCA variance-explained plot PDF; defaults to `5.0`. |
 
@@ -43,11 +45,11 @@ Only provide the input file parameters for the selected format. All selected fil
 
 ## Outputs
 
-Nextflow publishes the PCA H5AD, PCA variance-explained plot, HVG list, and QC branch outputs under `results/`:
+Nextflow publishes the UMAP H5AD, PCA variance-explained plot, HVG list, and QC branch outputs under `results/`:
 
 | Path | Contents |
 | --- | --- |
-| `results/pca/outfile.h5ad` | Metadata-filtered, normalized AnnData with PCA results. |
+| `results/umap/outfile.h5ad` | Metadata-filtered, normalized AnnData with PCA and UMAP results. |
 | `results/pca/plot_var_explained.pdf` | PDF plot of the variance explained by the PCA components. |
 | `results/hvgs/` | Text file (`hvgs.txt`) listing the selected highly variable genes. |
 | `results/qc/tables/` | QC metrics table (`qc_table.tsv`). |

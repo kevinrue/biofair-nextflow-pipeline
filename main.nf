@@ -6,6 +6,7 @@ include { SCE_FILTER } from './modules/sce-filter.nf'
 include { NORMALIZE_RNA_COUNTS_SE } from './modules/normalize-rna-counts-se.nf'
 include { CHOOSE_RNA_HVGS_SE } from './modules/choose-rna-hvgs-se.nf'
 include { RUN_PCA_SE } from './modules/run-pca-se.nf'
+include { RUN_UMAP_SE } from './modules/run-umap-se.nf'
 include { PLOT_COLDATA as PLOT_COLDATA_SUM } from './modules/plot-coldata.nf'
 include { PLOT_COLDATA as PLOT_COLDATA_DETECTED } from './modules/plot-coldata.nf'
 
@@ -22,6 +23,7 @@ params {
     mitochondrial_prefix: String = 'MT-'
     mitochondrial_threshold: Float = 3.0
     n_pcs: Integer = 25
+    neighbours: Integer = 15
     plot_pca_var_width: Float = 7.0
     plot_pca_var_height: Float = 5.0
     plot_qc_sum_width: Float = 3.0
@@ -84,11 +86,12 @@ workflow {
         params.plot_pca_var_width,
         params.plot_pca_var_height
     )
+    def umap = RUN_UMAP_SE(pca.outfile, params.neighbours)
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 
     publish:
-    pca_h5ad = pca.outfile
+    umap_h5ad = umap.outfile
     pca_var_explained_plot = pca.plot_var_explained
     hvgs = hvgs.hvgs
     qc_table = qc.qc_table
@@ -97,8 +100,8 @@ workflow {
 }
 
 output {
-    pca_h5ad {
-        path 'pca'
+    umap_h5ad {
+        path 'umap'
         mode 'copy'
     }
     pca_var_explained_plot {
