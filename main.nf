@@ -5,6 +5,7 @@ include { RNA_QC } from './modules/rna-qc.nf'
 include { SCE_FILTER } from './modules/sce-filter.nf'
 include { NORMALIZE_RNA_COUNTS_SE } from './modules/normalize-rna-counts-se.nf'
 include { CHOOSE_RNA_HVGS_SE } from './modules/choose-rna-hvgs-se.nf'
+include { RUN_PCA_SE } from './modules/run-pca-se.nf'
 include { PLOT_COLDATA as PLOT_COLDATA_SUM } from './modules/plot-coldata.nf'
 include { PLOT_COLDATA as PLOT_COLDATA_DETECTED } from './modules/plot-coldata.nf'
 
@@ -73,11 +74,13 @@ workflow {
     def filtered = SCE_FILTER(filterInput)
     def normalized = NORMALIZE_RNA_COUNTS_SE(filtered.outfile)
     def hvgs = CHOOSE_RNA_HVGS_SE(normalized.outfile)
+    def pcaInput = normalized.outfile.join(hvgs.hvgs)
+    def pca = RUN_PCA_SE(pcaInput, 25)
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 
     publish:
-    normalized_h5ad = normalized.outfile
+    pca_h5ad = pca.outfile
     hvgs = hvgs.hvgs
     qc_table = qc.qc_table
     sum_plot = sumPlot.outfile
@@ -85,8 +88,8 @@ workflow {
 }
 
 output {
-    normalized_h5ad {
-        path 'normalized/h5ad'
+    pca_h5ad {
+        path 'pca/h5ad'
         mode 'copy'
     }
     hvgs {
