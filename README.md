@@ -36,16 +36,19 @@ Choose one input format for each run and explicitly set `input_type` to `mtx` or
 | `--plot_qc_detected_height` | Optional | Height in inches of the QC detected plot PDF; defaults to `5.0`. |
 | `--metadata_filters` | Required | JSON file containing `rowdata` and `coldata` filter trees. Either section can be empty to skip filtering that dimension. The examples use `data/metadata-filters.json`. |
 | `--n_pcs` | Optional | Number of principal components to retain in PCA; defaults to `25`. |
+| `--plot_pca_var_width` | Optional | Width in inches of the PCA variance-explained plot PDF; defaults to `7.0` (the example parameter files use `9.0`). |
+| `--plot_pca_var_height` | Optional | Height in inches of the PCA variance-explained plot PDF; defaults to `5.0`. |
 
 Only provide the input file parameters for the selected format. All selected files, including the metadata filter JSON, must exist and be readable by Nextflow. The JSON filter format uses explicit predicate objects; see `data/metadata-filters.json` for the example column filter and an empty row filter.
 
 ## Outputs
 
-Nextflow publishes the PCA H5AD, HVG list, and QC branch outputs under `results/`:
+Nextflow publishes the PCA H5AD, PCA variance-explained plot, HVG list, and QC branch outputs under `results/`:
 
 | Path | Contents |
 | --- | --- |
 | `results/pca/h5ad/` | Metadata-filtered, normalized AnnData with PCA results (`.h5ad`) file. |
+| `results/pca/variance_explained/` | PDF plot of the variance explained by the PCA components. |
 | `results/hvgs/` | Text file (`hvgs.txt`) listing the selected highly variable genes. |
 | `results/qc/tables/` | QC metrics table (`qc_table.tsv`). |
 | `results/qc/plot_sum/` | PDF plot of the `sum` QC column. |
