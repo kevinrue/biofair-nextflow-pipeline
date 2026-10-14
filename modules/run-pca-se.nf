@@ -16,9 +16,14 @@ process RUN_PCA_SE {
     tuple val(meta), path(infile, name: 'infile.h5ad'), path(features, name: 'features.txt')
     // Number of PCs to retain (float; default in spec: 25)
     val n_pcs
+    // Plot width (inches) (float; default in spec: 7)
+    val plot_var_width
+    // Plot height (inches) (float; default in spec: 5)
+    val plot_var_height
 
     output:
     tuple val(meta), path('outfile.h5ad'), emit: outfile
+    tuple val(meta), path('plot_var_explained.pdf'), emit: plot_var_explained
 
     script:
     """
@@ -26,11 +31,15 @@ process RUN_PCA_SE {
         --infile '${(infile as String).replace("'", "'\\''")}' \\
         --features '${(features as String).replace("'", "'\\''")}' \\
         --n_pcs '${(n_pcs as String).replace("'", "'\\''")}' \\
-        --outfile 'outfile.h5ad'
+        --plot_var_width '${(plot_var_width as String).replace("'", "'\\''")}' \\
+        --plot_var_height '${(plot_var_height as String).replace("'", "'\\''")}' \\
+        --outfile 'outfile.h5ad' \\
+        --plot_var_explained 'plot_var_explained.pdf'
     """
 
     stub:
     """
     touch 'outfile.h5ad'
+    touch 'plot_var_explained.pdf'
     """
 }

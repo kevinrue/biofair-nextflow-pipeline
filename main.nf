@@ -22,6 +22,8 @@ params {
     mitochondrial_prefix: String = 'MT-'
     mitochondrial_threshold: Float = 3.0
     n_pcs: Integer = 25
+    plot_pca_var_width: Float = 7.0
+    plot_pca_var_height: Float = 5.0
     plot_qc_sum_width: Float = 3.0
     plot_qc_sum_height: Float = 5.0
     plot_qc_detected_width: Float = 3.0
@@ -76,12 +78,18 @@ workflow {
     def normalized = NORMALIZE_RNA_COUNTS_SE(filtered.outfile)
     def hvgs = CHOOSE_RNA_HVGS_SE(normalized.outfile)
     def pcaInput = normalized.outfile.join(hvgs.hvgs)
-    def pca = RUN_PCA_SE(pcaInput, params.n_pcs)
+    def pca = RUN_PCA_SE(
+        pcaInput,
+        params.n_pcs,
+        params.plot_pca_var_width,
+        params.plot_pca_var_height
+    )
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 
     publish:
     pca_h5ad = pca.outfile
+    pca_var_explained_plot = pca.plot_var_explained
     hvgs = hvgs.hvgs
     qc_table = qc.qc_table
     sum_plot = sumPlot.outfile
@@ -91,6 +99,10 @@ workflow {
 output {
     pca_h5ad {
         path 'pca/h5ad'
+        mode 'copy'
+    }
+    pca_var_explained_plot {
+        path 'pca/variance_explained'
         mode 'copy'
     }
     hvgs {
