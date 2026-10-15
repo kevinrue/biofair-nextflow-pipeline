@@ -6,6 +6,7 @@ include { SCE_FILTER } from './modules/sce-filter.nf'
 include { NORMALIZE_RNA_COUNTS_SE } from './modules/normalize-rna-counts-se.nf'
 include { CHOOSE_RNA_HVGS_SE } from './modules/choose-rna-hvgs-se.nf'
 include { RUN_PCA_SE } from './modules/run-pca-se.nf'
+include { CLUSTER_GRAPH_SE } from './modules/cluster-graph-se.nf'
 include { RUN_UMAP_SE } from './modules/run-umap-se.nf'
 include { PLOT_COLDATA as PLOT_COLDATA_SUM } from './modules/plot-coldata.nf'
 include { PLOT_COLDATA as PLOT_COLDATA_DETECTED } from './modules/plot-coldata.nf'
@@ -24,6 +25,8 @@ params {
     mitochondrial_threshold: Float = 3.0
     n_pcs: Integer = 25
     neighbours: Integer = 15
+    clustering_method: String = 'multilevel'
+    clustering_resolution: Float = 1.0
     plot_umap_width: Float = 7.0
     plot_umap_height: Float = 5.0
     plot_umap_point_size: Float = 1.0
@@ -96,13 +99,19 @@ workflow {
         params.plot_umap_height,
         params.plot_umap_point_size
     )
+    def clustered = CLUSTER_GRAPH_SE(
+        umap.outfile,
+        params.neighbours,
+        params.clustering_method,
+        params.clustering_resolution
+    )
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 
     publish:
-    umap_h5ad = umap.outfile
     umap_plot = umap.plot_umap
     pca_var_explained_plot = pca.plot_var_explained
+    clustered_h5ad = clustered.outfile
     hvgs = hvgs.hvgs
     qc_table = qc.qc_table
     sum_plot = sumPlot.outfile
@@ -110,16 +119,16 @@ workflow {
 }
 
 output {
-    umap_h5ad {
-        path 'umap'
-        mode 'copy'
-    }
     umap_plot {
         path 'umap'
         mode 'copy'
     }
     pca_var_explained_plot {
         path 'pca'
+        mode 'copy'
+    }
+    clustered_h5ad {
+        path 'clustered'
         mode 'copy'
     }
     hvgs {

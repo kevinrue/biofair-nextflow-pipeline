@@ -1,6 +1,6 @@
 # BioFAIR Nextflow pipeline
 
-This pipeline processes a single 10x Genomics single-cell RNA-seq sample. It imports counts, performs RNA quality control, filters metadata, normalizes counts, selects highly variable genes (HVGs), and runs PCA.
+This pipeline processes a single 10x Genomics single-cell RNA-seq sample. It imports counts, performs RNA quality control, filters metadata, normalizes counts, selects highly variable genes (HVGs), runs PCA and graph-based clustering, and computes a UMAP embedding.
 
 ## Workflow
 
@@ -14,6 +14,7 @@ For each run, the pipeline:
 6. Selects highly variable genes from the normalized counts.
 7. Runs PCA on the normalized counts using the selected HVGs as features, retaining the number of principal components set by `--n_pcs` (default: 25).
 8. Runs UMAP using the PCA results and the number of neighbours set by `--neighbours` (default: 15), and creates a UMAP plot.
+9. Runs graph-based clustering on the UMAP H5AD using `--neighbours` (default: 15), `--clustering_method` (default: `multilevel`), and `--clustering_resolution` (default: 1.0). The published H5AD contains both PCA/UMAP results and cluster assignments.
 
 The import, QC, and plotting tasks run in their respective DropletUtils, scrapper, and scater containers.
 
@@ -37,7 +38,9 @@ Choose one input format for each run and explicitly set `input_type` to `mtx` or
 | `--plot_qc_detected_height` | Optional | Height in inches of the QC detected plot PDF; defaults to `5.0`. |
 | `--metadata_filters` | Required | JSON file containing `rowdata` and `coldata` filter trees. Either section can be empty to skip filtering that dimension. The examples use `data/metadata-filters.json`. |
 | `--n_pcs` | Optional | Number of principal components to retain in PCA; defaults to `25`. |
-| `--neighbours` | Optional | Number of neighbours used by UMAP; defaults to `15` (the example parameter files use `10`). |
+| `--neighbours` | Optional | Number of neighbours used by graph clustering and UMAP; defaults to `15` (the example parameter files use `10`). |
+| `--clustering_method` | Optional | Graph community detection method: `multilevel`, `leiden`, or `walktrap`; defaults to `multilevel`. |
+| `--clustering_resolution` | Optional | Clustering resolution; defaults to `1.0` (the example parameter files use `0.45`). |
 | `--plot_umap_width` | Optional | Width in inches of the UMAP plot PDF; defaults to `7.0`. |
 | `--plot_umap_height` | Optional | Height in inches of the UMAP plot PDF; defaults to `5.0`. |
 | `--plot_umap_point_size` | Optional | Point size in millimetres for the UMAP plot; defaults to `1.0` (the example parameter files use `0.1`). |
@@ -48,11 +51,11 @@ Only provide the input file parameters for the selected format. All selected fil
 
 ## Outputs
 
-Nextflow publishes the UMAP H5AD and plot, PCA variance-explained plot, HVG list, and QC branch outputs under `results/`:
+Nextflow publishes the post-clustering H5AD, UMAP plot, PCA variance-explained plot, HVG list, and QC branch outputs under `results/`:
 
 | Path | Contents |
 | --- | --- |
-| `results/umap/outfile.h5ad` | Metadata-filtered, normalized AnnData with PCA and UMAP results. |
+| `results/clustered/outfile.h5ad` | Metadata-filtered, normalized AnnData with PCA and UMAP results plus graph-based cluster assignments. |
 | `results/umap/plot_umap.pdf` | PDF plot of the UMAP embedding. |
 | `results/pca/plot_var_explained.pdf` | PDF plot of the variance explained by the PCA components. |
 | `results/hvgs/` | Text file (`hvgs.txt`) listing the selected highly variable genes. |
