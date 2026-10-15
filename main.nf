@@ -27,6 +27,10 @@ params {
     neighbours: Integer = 15
     clustering_method: String = 'multilevel'
     clustering_resolution: Float = 1.0
+    clustering_plot_reduced_dim: String = 'PCA'
+    clustering_plot_width: Float = 7.0
+    clustering_plot_height: Float = 5.0
+    clustering_point_size: Float = 0.1
     plot_umap_width: Float = 7.0
     plot_umap_height: Float = 5.0
     plot_umap_point_size: Float = 1.0
@@ -103,7 +107,11 @@ workflow {
         umap.outfile,
         params.neighbours,
         params.clustering_method,
-        params.clustering_resolution
+        params.clustering_resolution,
+        params.clustering_plot_reduced_dim,
+        params.clustering_plot_width,
+        params.clustering_plot_height,
+        params.clustering_point_size
     )
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
@@ -112,6 +120,7 @@ workflow {
     umap_plot = umap.plot_umap
     pca_var_explained_plot = pca.plot_var_explained
     clustered_h5ad = clustered.outfile
+    clustering_plot = clustered.plot_clusters
     hvgs = hvgs.hvgs
     qc_table = qc.qc_table
     sum_plot = sumPlot.outfile
@@ -128,6 +137,10 @@ output {
         mode 'copy'
     }
     clustered_h5ad {
+        path 'clustered'
+        mode 'copy'
+    }
+    clustering_plot {
         path 'clustered'
         mode 'copy'
     }

@@ -14,5 +14,9 @@ plot_pca_var_height: 5.0
 neighbours: 10
 clustering_method: leiden
 clustering_resolution: 0.45
+clustering_plot_reduced_dim: UMAP
+clustering_plot_width: 7.0
+clustering_plot_height: 5.0
+clustering_point_size: 0.1
 plot_umap_point_size: 0.1
 metadata_filters: 'data/metadata-filters.json'

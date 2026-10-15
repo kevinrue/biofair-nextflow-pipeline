@@ -19,9 +19,18 @@ process CLUSTER_GRAPH_SE {
     val method
     // Clustering resolution (float; default in spec: 1)
     val resolution
+    // Reduced dimension entry to plot (string; default in spec: PCA)
+    val plot_reduced_dim
+    // Plot width (inches) (float; default in spec: 7)
+    val plot_width
+    // Plot height (inches) (float; default in spec: 5)
+    val plot_height
+    // Point size (float; default in spec: 1)
+    val point_size
 
     output:
     tuple val(meta), path('outfile.h5ad'), emit: outfile
+    tuple val(meta), path('plot_clusters.pdf'), emit: plot_clusters
 
     script:
     """
@@ -30,11 +39,17 @@ process CLUSTER_GRAPH_SE {
         --neighbours '${(neighbours as String).replace("'", "'\\''")}' \\
         --method '${(method as String).replace("'", "'\\''")}' \\
         --resolution '${(resolution as String).replace("'", "'\\''")}' \\
-        --outfile 'outfile.h5ad'
+        --plot_reduced_dim '${(plot_reduced_dim as String).replace("'", "'\\''")}' \\
+        --plot_width '${(plot_width as String).replace("'", "'\\''")}' \\
+        --plot_height '${(plot_height as String).replace("'", "'\\''")}' \\
+        --point_size '${(point_size as String).replace("'", "'\\''")}' \\
+        --outfile 'outfile.h5ad' \\
+        --plot_clusters 'plot_clusters.pdf'
     """
 
     stub:
     """
     touch 'outfile.h5ad'
+    touch 'plot_clusters.pdf'
     """
 }
