@@ -24,6 +24,8 @@ params {
     mitochondrial_threshold: Float = 3.0
     n_pcs: Integer = 25
     neighbours: Integer = 15
+    plot_umap_width: Float = 7.0
+    plot_umap_height: Float = 5.0
     plot_pca_var_width: Float = 7.0
     plot_pca_var_height: Float = 5.0
     plot_qc_sum_width: Float = 3.0
@@ -86,12 +88,18 @@ workflow {
         params.plot_pca_var_width,
         params.plot_pca_var_height
     )
-    def umap = RUN_UMAP_SE(pca.outfile, params.neighbours)
+    def umap = RUN_UMAP_SE(
+        pca.outfile,
+        params.neighbours,
+        params.plot_umap_width,
+        params.plot_umap_height
+    )
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)
 
     publish:
     umap_h5ad = umap.outfile
+    umap_plot = umap.plot_umap
     pca_var_explained_plot = pca.plot_var_explained
     hvgs = hvgs.hvgs
     qc_table = qc.qc_table
@@ -101,6 +109,10 @@ workflow {
 
 output {
     umap_h5ad {
+        path 'umap'
+        mode 'copy'
+    }
+    umap_plot {
         path 'umap'
         mode 'copy'
     }

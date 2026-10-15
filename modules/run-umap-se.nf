@@ -15,20 +15,29 @@ process RUN_UMAP_SE {
     tuple val(meta), path(infile, name: 'infile.h5ad')
     // Number of neighbours (integer; default in spec: 15)
     val neighbours
+    // Plot width (inches) (float; default in spec: 7)
+    val plot_width
+    // Plot height (inches) (float; default in spec: 5)
+    val plot_height
 
     output:
     tuple val(meta), path('outfile.h5ad'), emit: outfile
+    tuple val(meta), path('plot_umap.pdf'), emit: plot_umap
 
     script:
     """
     Rscript -e 'BiocJobs::execJob("scrapper", "run-umap-se")' \\
         --infile '${(infile as String).replace("'", "'\\''")}' \\
         --neighbours '${(neighbours as String).replace("'", "'\\''")}' \\
-        --outfile 'outfile.h5ad'
+        --plot_width '${(plot_width as String).replace("'", "'\\''")}' \\
+        --plot_height '${(plot_height as String).replace("'", "'\\''")}' \\
+        --outfile 'outfile.h5ad' \\
+        --plot_umap 'plot_umap.pdf'
     """
 
     stub:
     """
     touch 'outfile.h5ad'
+    touch 'plot_umap.pdf'
     """
 }
