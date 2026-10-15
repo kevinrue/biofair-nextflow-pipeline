@@ -15,6 +15,13 @@ The [BiocJobs developer guide](https://github.com/almahmoud/BiocJobs/blob/main/d
 
 Primarily addressed to the maintainer of the relevant Bioconductor package, the main thing it doesn't mention is the need to first clone the repository of the package locally, to add, edit, and commit the necessary files.
 
+To illustrate the process, here is a list of pull requests made to the upstream Bioconductor repositories, to create the modules in this pipeline:
+
+- [DropletUtils](https://github.com/MarioniLab/DropletUtils/compare/devel...kevinrue:DropletUtils:kra-read10xcounts-split?expand=1)
+- [scrapper](https://github.com/libscran/scrapper/compare/master...kevinrue:scrapper:biofair-biocjobs?expand=1)
+- [scater](https://github.com/alanocallaghan/scater/compare/devel...kevinrue:scater:biofair-biocjobs?expand=1)
+- [SingleCellExperiment](https://github.com/drisso/SingleCellExperiment/compare/master...kevinrue:SingleCellExperiment:refs/heads/biofair-biocjobs?expand=1)
+
 ## Running the pipeline tests
 
 The CI workflow runs both supported input modes with Nextflow and Docker. To run the same checks locally, install Nextflow and Docker, then run these commands from the repository root:
