@@ -10,4 +10,5 @@ plot_qc_detected_height: 5.0
 plot_pca_var_width: 9.0
 plot_pca_var_height: 5.0
 neighbours: 10
+plot_umap_point_size: 0.1
 metadata_filters: 'data/metadata-filters.json'

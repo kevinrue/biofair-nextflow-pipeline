@@ -19,6 +19,8 @@ process RUN_UMAP_SE {
     val plot_width
     // Plot height (inches) (float; default in spec: 5)
     val plot_height
+    // Point size (mm) (float; default in spec: 1)
+    val point_size
 
     output:
     tuple val(meta), path('outfile.h5ad'), emit: outfile
@@ -31,6 +33,7 @@ process RUN_UMAP_SE {
         --neighbours '${(neighbours as String).replace("'", "'\\''")}' \\
         --plot_width '${(plot_width as String).replace("'", "'\\''")}' \\
         --plot_height '${(plot_height as String).replace("'", "'\\''")}' \\
+        --point_size '${(point_size as String).replace("'", "'\\''")}' \\
         --outfile 'outfile.h5ad' \\
         --plot_umap 'plot_umap.pdf'
     """

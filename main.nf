@@ -26,6 +26,7 @@ params {
     neighbours: Integer = 15
     plot_umap_width: Float = 7.0
     plot_umap_height: Float = 5.0
+    plot_umap_point_size: Float = 1.0
     plot_pca_var_width: Float = 7.0
     plot_pca_var_height: Float = 5.0
     plot_qc_sum_width: Float = 3.0
@@ -92,7 +93,8 @@ workflow {
         pca.outfile,
         params.neighbours,
         params.plot_umap_width,
-        params.plot_umap_height
+        params.plot_umap_height,
+        params.plot_umap_point_size
     )
     def sumPlot = PLOT_COLDATA_SUM(qc.outfile, 'sum', params.plot_qc_sum_width, params.plot_qc_sum_height)
     def detectedPlot = PLOT_COLDATA_DETECTED(qc.outfile, 'detected', params.plot_qc_detected_width, params.plot_qc_detected_height)

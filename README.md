@@ -40,6 +40,7 @@ Choose one input format for each run and explicitly set `input_type` to `mtx` or
 | `--neighbours` | Optional | Number of neighbours used by UMAP; defaults to `15` (the example parameter files use `10`). |
 | `--plot_umap_width` | Optional | Width in inches of the UMAP plot PDF; defaults to `7.0`. |
 | `--plot_umap_height` | Optional | Height in inches of the UMAP plot PDF; defaults to `5.0`. |
+| `--plot_umap_point_size` | Optional | Point size in millimetres for the UMAP plot; defaults to `1.0` (the example parameter files use `0.1`). |
 | `--plot_pca_var_width` | Optional | Width in inches of the PCA variance-explained plot PDF; defaults to `7.0` (the example parameter files use `9.0`). |
 | `--plot_pca_var_height` | Optional | Height in inches of the PCA variance-explained plot PDF; defaults to `5.0`. |
 
